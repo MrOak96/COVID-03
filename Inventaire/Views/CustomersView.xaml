@@ -97,7 +97,10 @@
 
             <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Margin="10">
 
-                <Button Content="Nouvelle facture" Width="150" HorizontalAlignment="left"/>
+                <Button Content="Nouvelle facture" Width="150" HorizontalAlignment="left"
+                        Command="{Binding DataContext.NewInvoiceCommand,
+                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
+                                CommandParameter="{Binding SelectedCustomer}"/>
 
                 <DataGrid ItemsSource="{Binding SelectedCustomer.Invoices}" AutoGenerateColumns="false">
                     <DataGrid.Columns>
@@ -108,8 +111,9 @@
 
                                 <DataTemplate>
 
-                                    <Button Content="Voir" Command="{Binding DataContext.DisplayInvoiceCommand,
-                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
+                                    <Button Content="Voir"
+                                            Command="{Binding DataContext.DisplayInvoiceCommand,
+                                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DockPanel}}"
                                             CommandParameter="{Binding}"></Button>
                                 
                                 </DataTemplate>

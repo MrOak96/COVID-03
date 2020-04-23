@@ -22,17 +22,20 @@ namespace BillingManagement.UI.ViewModels
 		CustomerViewModel customerViewModel;
 		InvoiceViewModel invoiceViewModel;
 
-		public ChangeViewCommand ChangeViewCommand { get; set; }
+		public RelayCommand ChangeViewCommand { get; set; }
 		public RelayCommand NewCustomerCommand { get; private set; }
+		public RelayCommand NewInvoiceCommand { get; private set; }
 		public RelayCommand DisplayInvoiceCommand { get; private set; }
 		public RelayCommand DisplayCustomerCommand { get; private set; }
 
 		public MainViewModel()
 		{
-			ChangeViewCommand = new ChangeViewCommand(ChangeView);
+			ChangeViewCommand = new RelayCommand(ChangeView);
 			NewCustomerCommand = new RelayCommand(NewCustomer);
+			NewInvoiceCommand = new RelayCommand(NewInvoice, CanExecuteNewInvoice);
 
 			DisplayInvoiceCommand = new RelayCommand(DisplayInvoice);
+			DisplayCustomerCommand = new RelayCommand(DisplayCustomer, CanExecuteDisplayCustomer);
 
 			customerViewModel = new CustomerViewModel();
 			invoiceViewModel = new InvoiceViewModel(customerViewModel.Customers);
@@ -41,9 +44,9 @@ namespace BillingManagement.UI.ViewModels
 
 		}
 
-		private void ChangeView(string vm)
+		private void ChangeView(object vm)
 		{
-			switch (vm)
+			switch (vm as string)
 			{
 				case "customers":
 					VM = customerViewModel;
@@ -74,6 +77,44 @@ namespace BillingManagement.UI.ViewModels
 
 			VM = invoiceViewModel;
 
+
+		}
+
+		private void NewInvoice(object c)
+		{
+
+			Customer customer = c as Customer;
+
+			Invoice invoice = new Invoice(customer);
+
+			customer.Invoices.Add(invoice);
+
+			DisplayInvoice(invoice);
+
+		}
+
+		private bool CanExecuteNewInvoice(object c)
+		{
+
+			return c == null ? false : true;
+
+		}
+
+		private void DisplayCustomer(object c)
+		{
+
+			Customer customer = c as Customer;
+
+			customerViewModel.SelectedCustomer = customer;
+
+			VM = customerViewModel;
+
+		}
+
+		private bool CanExecuteDisplayCustomer(object c)
+		{
+
+			return c == null ? false : true;
 
 		}
 
